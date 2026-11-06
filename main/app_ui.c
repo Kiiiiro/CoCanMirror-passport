@@ -9,6 +9,7 @@
 #include "app_config.h"
 #include "bsp_battery.h"
 #include "bsp_display.h"
+#include "esp_lcd_panel_ops.h"
 #include "esp_app_desc.h"
 #include "esp_log.h"
 #include "esp_system.h"
@@ -1832,15 +1833,31 @@ static void ui_brightness_step(int delta) {
 }
 
 // 息屏/唤醒：只关背光并暂停刷新，数据轮询继续（唤醒即是最新值）。
+static void display_panel_sleep(bool sleep) {
+    esp_lcd_panel_handle_t panel = bsp_display_panel();
+    if (!panel) return;
+    if (sleep) {
+        (void)esp_lcd_panel_disp_on_off(panel, false);
+        (void)esp_lcd_panel_disp_sleep(panel, true);
+    } else {
+        (void)esp_lcd_panel_disp_sleep(panel, false);
+        vTaskDelay(pdMS_TO_TICKS(120));  // ST7789 SLPOUT 后需要 120ms 才能显示
+        (void)esp_lcd_panel_disp_on_off(panel, true);
+    }
+}
+
 static void ui_screen_set(bool on) {
     s_screen_off = !on;
     power_link_set_idle(!on);
     if (!on) {
         bsp_display_backlight(0);
+        display_panel_sleep(true);
         return;
     }
 
+    display_panel_sleep(false);
     bsp_display_backlight(s_brightness);
+    lv_obj_invalidate(lv_screen_active());
     s_last_activity_ms = esp_timer_get_time() / 1000;
 
     const power_link_view_t *view = view_refresh();

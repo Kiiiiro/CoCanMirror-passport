@@ -1,1 +1,1 @@
-0f86477c912598666a00ec757c1adfb711768083a901fba1ebe4e7a6c4498e70  FoloToy-AI-Passport-2.6.2-public.bin
+ea1a7d6acc5040420df4687af28c117d42902119210d33fe32130a030c9b437d  FoloToy-AI-Passport-2.6.3-public.bin
