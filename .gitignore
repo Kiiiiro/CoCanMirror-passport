@@ -11,3 +11,14 @@ managed_components/
 /.agents/skills/passport-build
 /.agents/skills/passport-device-test
 /.agents/skills/passport-debug
+
+# --- 本地构建与临时产物 ---
+*.log
+*.bin
+*.zip
+flash-*.log
+merge*.log
+ninja-*.txt
+/share_ui/
+/manual/
+/publisher/

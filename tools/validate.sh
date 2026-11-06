@@ -23,11 +23,19 @@ run_static_checks() {
     fi
     "${actionlint_bin}" -color .github/workflows/*.yml
 
-    test_dir="$(mktemp -d /tmp/ai-passport-host-tests.XXXXXX)"
+    test_dir="$(mktemp -d "${TMPDIR:-/tmp}/ai-passport-host-tests.XXXXXX")"
     "${CC:-cc}" -std=c11 -Wall -Wextra -Werror -Imain \
         tests/test_ui_pixel_math.c main/ui_pixel_math.c \
         -o "${test_dir}/test_ui_pixel_math"
     "${test_dir}/test_ui_pixel_math"
+    "${CC:-cc}" -std=c11 -Wall -Wextra -Werror -Imain \
+        tests/test_power_metrics.c main/power_metrics.c \
+        -o "${test_dir}/test_power_metrics"
+    "${test_dir}/test_power_metrics"
+    "${CC:-cc}" -std=c11 -Wall -Wextra -Werror -Imain \
+        tests/test_link_failover.c main/link_failover.c \
+        -o "${test_dir}/test_link_failover"
+    "${test_dir}/test_link_failover"
     "${CC:-cc}" -std=c11 -Wall -Wextra -Werror -Imain \
         tests/test_demo_navigation.c main/demo_navigation.c \
         -o "${test_dir}/test_demo_navigation"
@@ -81,14 +89,16 @@ run_static_checks() {
 
 run_firmware_checks() (
     local validation_build_dir
+    local validation_tmp_root
 
     if ! command -v idf.py >/dev/null 2>&1; then
         echo "ERROR: idf.py is not available; activate ESP-IDF 5.5.3 first." >&2
         return 1
     fi
 
-    validation_build_dir="$(mktemp -d /tmp/ai-passport-firmware.XXXXXX)"
-    trap 'case "${validation_build_dir}" in /tmp/ai-passport-firmware.*) rm -rf -- "${validation_build_dir}" ;; esac' EXIT
+    validation_tmp_root="${TMPDIR:-/tmp}"
+    validation_build_dir="$(mktemp -d "${validation_tmp_root}/ai-passport-firmware.XXXXXX")"
+    trap 'case "${validation_build_dir}" in "${validation_tmp_root}"/ai-passport-firmware.*) rm -rf -- "${validation_build_dir}" ;; esac' EXIT
 
     SDKCONFIG_DEFAULTS="${repo_root}/sdkconfig.defaults" \
         idf.py -B "${validation_build_dir}" \
