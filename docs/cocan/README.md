@@ -31,7 +31,7 @@ idf.py build
 整机镜像（从 0x0 写入）：
 
 ```bash
-esptool --chip esp32c3 -p <PORT> -b 460800 write_flash 0x0 firmware/FoloToy-AI-Passport-2.6.3-public.bin
+esptool --chip esp32c3 -p <PORT> -b 460800 write_flash 0x0 firmware/FoloToy-AI-Passport-2.6.4-public.bin
 ```
 
 ## 已知限制

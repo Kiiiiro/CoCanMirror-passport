@@ -95,8 +95,18 @@ static int64_t s_last_activity_ms;
 // 电量为 I2C 读取，放在独立任务里，避免任何阻塞落进 LVGL 任务。
 static void battery_task(void *arg) {
     (void)arg;
+    // CW2017 在 4.2V 附近曲线很平，满电时通常只报 93~97%。
+    // 电压到达满电区间后按 100% 显示，回落到 4.08V 以下再交还给电量计。
+    bool full = false;
     for (;;) {
-        s_battery_percent = bsp_battery_soc();
+        const int soc = bsp_battery_soc();
+        const int mv = bsp_battery_mv();
+        if (mv >= 4140) full = true;
+        else if (mv > 0 && mv < 4060) full = false;
+
+        if (soc >= 0) {
+            s_battery_percent = (full && soc < 100) ? 100 : soc;
+        }
         vTaskDelay(pdMS_TO_TICKS(5000));
     }
 }

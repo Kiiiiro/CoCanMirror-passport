@@ -1,4 +1,4 @@
 cmake_minimum_required(VERSION 3.16)
 include($ENV{IDF_PATH}/tools/cmake/project.cmake)
 
-project(FoloToy-AI-Passport VERSION 2.6.3)
+project(FoloToy-AI-Passport VERSION 2.6.4)
