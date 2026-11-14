@@ -341,6 +341,7 @@ static void build_detail(void) {
     lv_obj_set_style_text_align(s_dt_va, LV_TEXT_ALIGN_CENTER, 0);
     s_dt_proto = make_label(card, "", &s_font14, COL_TEXT, 0, 80, 220);
     lv_obj_set_style_text_align(s_dt_proto, LV_TEXT_ALIGN_CENTER, 0);
+    lv_label_set_long_mode(s_dt_proto, LV_LABEL_LONG_CLIP);
 
     lv_obj_t *chart_card = make_box(s_scr_detail, 10, 222, 220, 70, COL_CARD, 14);
     s_dt_chart_title = make_label(chart_card, "", &s_font14, COL_MUTED, 14, 4, 120);
@@ -1368,7 +1369,8 @@ static void speed_parts(const char *speed, char *name, size_t name_len, char *ra
 // 把设备返回的长协议名压缩成适合一行显示的名称。
 static const char *short_protocol(const char *protocol, char *buf, size_t len) {
     if (!protocol || protocol[0] == '\0') return "PD";
-    if (strstr(protocol, "Programmable Power Supply")) snprintf(buf, len, "PD PPS");
+    if (strstr(protocol, "小米澎湃秒")) snprintf(buf, len, "小米澎湃秒充");
+    else if (strstr(protocol, "Programmable Power Supply")) snprintf(buf, len, "PD PPS");
     else if (strstr(protocol, "Fixed High Voltage")) snprintf(buf, len, "PD Fixed");
     else if (strstr(protocol, "Fixed 5V")) snprintf(buf, len, "PD 5V");
     else if (strstr(protocol, "Legacy")) buf[0] = '\0';

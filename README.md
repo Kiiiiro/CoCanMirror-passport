@@ -15,13 +15,13 @@
 
 ## 下载与安装
 
-固件在 [Releases](https://github.com/Kiiiiro/CoCanMirror-passport/releases/tag/v2.6.4) 下载：
+固件在 [Releases](https://github.com/Kiiiiro/CoCanMirror-passport/releases/tag/v2.6.5) 下载：
 
 ```bash
-esptool --chip esp32c3 -p <PORT> -b 460800 write_flash 0x0 FoloToy-AI-Passport-2.6.4-public.bin
+esptool --chip esp32c3 -p <PORT> -b 460800 write_flash 0x0 FoloToy-AI-Passport-2.6.5-public.bin
 ```
 
-SHA256：`496d38cde1ae0b2e95d55e19d7474390c4df90e01ebbdcf87e49752af381cb35`
+SHA256：`a6898e24534e49ed870f3afec9bfe401b25ec5666ffe58633085243b5dcc1a8d`
 
 ## 从源码构建
 
